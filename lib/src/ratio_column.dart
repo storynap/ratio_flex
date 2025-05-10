@@ -11,6 +11,8 @@ class RatioColumn extends RatioFlex {
   /// If [flexes] is provided, it must have the same length as [children].
   /// If [flexes] is not provided, all children will have a flex value of 1.
   ///
+  /// The [spacing] property controls the vertical space between children.
+  ///
   /// The [flexFit] parameter determines the fit behavior of children:
   /// - [FlexFit.tight] (default): Forces children to fill available space (equivalent to Expanded)
   /// - [FlexFit.loose]: Allows children to use only as much space as they need
@@ -19,6 +21,7 @@ class RatioColumn extends RatioFlex {
     required super.children,
     super.flexes,
     super.flexFit,
+    super.spacing,
     super.mainAxisAlignment,
     super.mainAxisSize,
     super.crossAxisAlignment,

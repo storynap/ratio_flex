@@ -31,9 +31,10 @@ class _MyHomePageState extends State<MyHomePage> {
   FlexFit currentFlexFit = FlexFit.tight;
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    const OriginalExamplesPage(),
-    const RatioFlexExamplesPage(),
+  late final List<Widget> _pages = [
+    OriginalExamplesPage(flexFit: currentFlexFit),
+    RatioFlexExamplesPage(flexFit: currentFlexFit),
+    SpacingExamplesPage(flexFit: currentFlexFit),
   ];
 
   @override
@@ -42,7 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Ratio Flex Example'),
       ),
-      body: _pages[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          OriginalExamplesPage(flexFit: currentFlexFit),
+          RatioFlexExamplesPage(flexFit: currentFlexFit),
+          SpacingExamplesPage(flexFit: currentFlexFit),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -58,6 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.view_quilt),
             label: 'RatioFlex',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.space_bar),
+            label: 'Spacing',
           ),
         ],
       ),
@@ -75,12 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class OriginalExamplesPage extends StatelessWidget {
-  const OriginalExamplesPage({Key? key}) : super(key: key);
+  final FlexFit flexFit;
+
+  const OriginalExamplesPage({Key? key, required this.flexFit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final flexFit = context.findAncestorStateOfType<_MyHomePageState>()?.currentFlexFit ?? FlexFit.tight;
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -126,12 +138,12 @@ class OriginalExamplesPage extends StatelessWidget {
 }
 
 class RatioFlexExamplesPage extends StatelessWidget {
-  const RatioFlexExamplesPage({Key? key}) : super(key: key);
+  final FlexFit flexFit;
+
+  const RatioFlexExamplesPage({Key? key, required this.flexFit}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final flexFit = context.findAncestorStateOfType<_MyHomePageState>()?.currentFlexFit ?? FlexFit.tight;
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -222,6 +234,127 @@ class RatioFlexExamplesPage extends StatelessWidget {
                 Container(color: Colors.lime, width: 80, height: 50, child: const Center(child: Text('1'))),
               ],
               flexFit: FlexFit.loose, // Using loose to demonstrate spacing
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SpacingExamplesPage extends StatelessWidget {
+  final FlexFit flexFit;
+
+  const SpacingExamplesPage({Key? key, required this.flexFit}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'RatioRow with spacing (horizontal gap):',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            height: 100,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+            ),
+            child: RatioRow(
+              children: [
+                Container(color: Colors.red, child: const Center(child: Text('1'))),
+                Container(color: Colors.green, child: const Center(child: Text('1'))),
+                Container(color: Colors.blue, child: const Center(child: Text('1'))),
+              ],
+              spacing: 20.0, // 20 logical pixels of horizontal spacing
+              flexFit: flexFit,
+            ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'RatioColumn with spacing (vertical gap):',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            height: 200,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+            ),
+            child: RatioColumn(
+              children: [
+                Container(color: Colors.amber, child: const Center(child: Text('1'))),
+                Container(color: Colors.purple, child: const Center(child: Text('1'))),
+                Container(color: Colors.teal, child: const Center(child: Text('1'))),
+              ],
+              spacing: 15.0, // 15 logical pixels of vertical spacing
+              flexFit: flexFit,
+            ),
+          ),
+          const SizedBox(height: 20),
+          const Text(
+            'RatioFlex (horizontal) with different spacing values:',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 5),
+          const Text('8 pixels spacing:'),
+          Container(
+            height: 70,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+            ),
+            child: RatioFlex(
+              direction: Axis.horizontal,
+              children: [
+                Container(color: Colors.pink, child: const Center(child: Text('1'))),
+                Container(color: Colors.cyan, child: const Center(child: Text('2'))),
+                Container(color: Colors.amber, child: const Center(child: Text('1'))),
+              ],
+              flexes: [1, 2, 1],
+              spacing: 8.0,
+              flexFit: flexFit,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text('16 pixels spacing:'),
+          Container(
+            height: 70,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+            ),
+            child: RatioFlex(
+              direction: Axis.horizontal,
+              children: [
+                Container(color: Colors.pink, child: const Center(child: Text('1'))),
+                Container(color: Colors.cyan, child: const Center(child: Text('2'))),
+                Container(color: Colors.amber, child: const Center(child: Text('1'))),
+              ],
+              flexes: [1, 2, 1],
+              spacing: 16.0,
+              flexFit: flexFit,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text('24 pixels spacing:'),
+          Container(
+            height: 70,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+            ),
+            child: RatioFlex(
+              direction: Axis.horizontal,
+              children: [
+                Container(color: Colors.pink, child: const Center(child: Text('1'))),
+                Container(color: Colors.cyan, child: const Center(child: Text('2'))),
+                Container(color: Colors.amber, child: const Center(child: Text('1'))),
+              ],
+              flexes: [1, 2, 1],
+              spacing: 24.0,
+              flexFit: flexFit,
             ),
           ),
         ],

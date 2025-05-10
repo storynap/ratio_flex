@@ -9,6 +9,7 @@ A Flutter package that provides `RatioFlex`, `RatioRow`, and `RatioColumn` widge
 - `RatioColumn`: A Column widget that automatically applies flex ratios to its children
 - Control the flex behavior with the `flexFit` property
 - Optional `flexes` parameter (defaults to 1 for all children if not provided)
+- Customizable spacing between children
 
 ## Usage
 
@@ -40,6 +41,17 @@ RatioFlex(
   flexes: [2, 1, 2], // 2:1:2 ratio
   flexFit: FlexFit.loose,
 )
+
+// With spacing between children
+RatioFlex(
+  direction: Axis.horizontal,
+  children: [
+    Container(color: Colors.red),
+    Container(color: Colors.green),
+    Container(color: Colors.blue),
+  ],
+  spacing: 16.0, // Adds 16 pixels of space between each child
+)
 ```
 
 ### RatioRow
@@ -64,6 +76,16 @@ RatioRow(
     Container(color: Colors.blue),
   ],
   // No flexes provided, all children get flex: 1
+)
+
+// With horizontal spacing between children
+RatioRow(
+  children: [
+    Container(color: Colors.red),
+    Container(color: Colors.green),
+    Container(color: Colors.blue),
+  ],
+  spacing: 8.0, // Adds 8 pixels of horizontal space between each child
 )
 ```
 
@@ -90,6 +112,16 @@ RatioColumn(
   ],
   // No flexes provided, all children get flex: 1
 )
+
+// With vertical spacing between children
+RatioColumn(
+  children: [
+    Container(color: Colors.red),
+    Container(color: Colors.green),
+    Container(color: Colors.blue),
+  ],
+  spacing: 12.0, // Adds 12 pixels of vertical space between each child
+)
 ```
 
 ## Additional Parameters
@@ -103,6 +135,10 @@ All widgets support standard layout parameters:
 - `verticalDirection`
 - `textBaseline`
 - `clipBehavior`
+- `spacing` - Controls the space between each child:
+  - For `RatioRow`: horizontal spacing (width)
+  - For `RatioColumn`: vertical spacing (height)
+  - For `RatioFlex`: depends on direction (width for horizontal, height for vertical)
 
 ## Requirements
 

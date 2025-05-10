@@ -22,6 +22,9 @@ class RatioFlex extends StatelessWidget {
   /// The flex fit to use for all children (tight is equivalent to Expanded, loose is regular Flexible)
   final FlexFit flexFit;
 
+  /// The spacing between each child (width in Row, height in Column)
+  final double spacing;
+
   /// Optional layout properties
   final MainAxisAlignment mainAxisAlignment;
   final MainAxisSize mainAxisSize;
@@ -36,6 +39,10 @@ class RatioFlex extends StatelessWidget {
   /// If [flexes] is provided, it must have the same length as [children].
   /// If [flexes] is not provided, all children will have a flex value of 1.
   ///
+  /// The [spacing] property controls the space between children:
+  /// - For [Axis.horizontal] direction, it adds horizontal spacing (width)
+  /// - For [Axis.vertical] direction, it adds vertical spacing (height)
+  ///
   /// The [direction] parameter determines whether this is a row or column:
   /// - [Axis.horizontal]: Arranges children in a row (left to right).
   /// - [Axis.vertical]: Arranges children in a column (top to bottom).
@@ -49,6 +56,7 @@ class RatioFlex extends StatelessWidget {
     required this.children,
     this.flexes,
     this.flexFit = FlexFit.tight,
+    this.spacing = 8.0,
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.mainAxisSize = MainAxisSize.max,
     this.crossAxisAlignment = CrossAxisAlignment.center,
@@ -58,6 +66,7 @@ class RatioFlex extends StatelessWidget {
     this.clipBehavior = Clip.none,
   })  : assert(flexes == null || children.length == flexes.length,
             'If flexes is provided, it must have the same length as children'),
+        assert(spacing >= 0, 'Spacing must be non-negative'),
         super(key: key);
 
   @override
@@ -75,22 +84,46 @@ class RatioFlex extends StatelessWidget {
     );
   }
 
-  /// Builds a list of children wrapped with [Flexible] widgets based on flex values.
+  /// Builds a list of children wrapped with [Flexible] widgets based on flex values,
+  /// with spacing in between if specified.
   List<Widget> _buildFlexibleChildren() {
     final effectiveFlexes = flexes ?? List<int>.filled(children.length, 1);
 
-    return List<Widget>.generate(
-      children.length,
-      (index) {
-        final child = children[index];
-        final flex = effectiveFlexes[index];
-
-        return Flexible(
-          flex: flex,
+    // If no spacing, just return the wrapped children
+    if (spacing == 0.0 || children.isEmpty) {
+      return List<Widget>.generate(
+        children.length,
+        (index) => Flexible(
+          flex: effectiveFlexes[index],
           fit: flexFit,
-          child: child,
+          child: children[index],
+        ),
+      );
+    }
+
+    // With spacing, we need to insert SizedBox widgets between children
+    final result = <Widget>[];
+
+    for (int i = 0; i < children.length; i++) {
+      // Add the flexible child
+      result.add(
+        Flexible(
+          flex: effectiveFlexes[i],
+          fit: flexFit,
+          child: children[i],
+        ),
+      );
+
+      // Add spacing after each child except the last one
+      if (i < children.length - 1) {
+        // For horizontal direction (Row), use width
+        // For vertical direction (Column), use height
+        result.add(
+          direction == Axis.horizontal ? SizedBox(width: spacing) : SizedBox(height: spacing),
         );
-      },
-    );
+      }
+    }
+
+    return result;
   }
 }

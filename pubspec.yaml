@@ -1,6 +1,6 @@
 name: ratio_flex
 description: A Flutter package that provides RatioRow and RatioColumn widgets for simplified flex ratio distribution
-version: 1.0.1
+version: 1.1.0
 homepage: https://github.com/storynap/ratio_flex
 repository: https://github.com/storynap/ratio_flex
 issue_tracker: https://github.com/storynap/ratio_flex/issues
