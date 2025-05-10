@@ -1,15 +1,46 @@
 # ratio_flex
 
-A Flutter package that provides `RatioRow` and `RatioColumn` widgets for simplified flex ratio distribution.
+A Flutter package that provides `RatioFlex`, `RatioRow`, and `RatioColumn` widgets for simplified flex ratio distribution.
 
 ## Features
 
+- `RatioFlex`: A flexible layout widget similar to Flutter's built-in `Flex` that supports custom flex ratios
 - `RatioRow`: A Row widget that automatically applies flex ratios to its children
 - `RatioColumn`: A Column widget that automatically applies flex ratios to its children
 - Control the flex behavior with the `flexFit` property
 - Optional `flexes` parameter (defaults to 1 for all children if not provided)
 
 ## Usage
+
+### RatioFlex
+
+Similar to Flutter's built-in `Flex` widget, `RatioFlex` can be used as either a row or column by specifying the `direction`:
+
+```dart
+// Use as a Row
+RatioFlex(
+  direction: Axis.horizontal, // Creates a row layout
+  children: [
+    Container(color: Colors.red),
+    Container(color: Colors.green),
+    Container(color: Colors.blue),
+  ],
+  flexes: [1, 2, 1], // 1:2:1 ratio
+  flexFit: FlexFit.tight,
+)
+
+// Use as a Column
+RatioFlex(
+  direction: Axis.vertical, // Creates a column layout
+  children: [
+    Container(color: Colors.red),
+    Container(color: Colors.green),
+    Container(color: Colors.blue),
+  ],
+  flexes: [2, 1, 2], // 2:1:2 ratio
+  flexFit: FlexFit.loose,
+)
+```
 
 ### RatioRow
 
@@ -63,7 +94,7 @@ RatioColumn(
 
 ## Additional Parameters
 
-Both `RatioRow` and `RatioColumn` support all standard layout parameters:
+All widgets support standard layout parameters:
 
 - `mainAxisAlignment`
 - `crossAxisAlignment`
@@ -71,6 +102,7 @@ Both `RatioRow` and `RatioColumn` support all standard layout parameters:
 - `textDirection`
 - `verticalDirection`
 - `textBaseline`
+- `clipBehavior`
 
 ## Requirements
 

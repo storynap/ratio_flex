@@ -30,7 +30,7 @@ void main() {
 
       // Verify the widget render
       expect(find.byType(RatioColumn), findsOneWidget);
-      expect(find.byType(Column), findsOneWidget);
+      expect(find.byType(Flex), findsOneWidget);
       expect(find.byType(Flexible), findsNWidgets(3));
       expect(find.byType(Container), findsNWidgets(3));
 
@@ -153,9 +153,10 @@ void main() {
       );
 
       // Find the Column
-      final column = tester.widget<Column>(find.byType(Column));
+      final column = tester.widget<Flex>(find.byType(Flex));
 
       // Check Column properties are correctly passed
+      expect(column.direction, Axis.vertical);
       expect(column.mainAxisAlignment, equals(MainAxisAlignment.spaceEvenly));
       expect(column.crossAxisAlignment, equals(CrossAxisAlignment.end));
       expect(column.mainAxisSize, equals(MainAxisSize.min));
